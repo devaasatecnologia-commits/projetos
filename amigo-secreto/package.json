@@ -1,0 +1,12 @@
+{
+  "name": "amigo-secreto-familia-marcon",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Amigo Secreto Família Marcon — sorteio particular + desafio de entrega. Desenvolvimento AASA TECNOLOGIA.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
