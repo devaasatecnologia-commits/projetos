@@ -14,7 +14,7 @@ $pdo = new PDO("mysql:host=$DB_HOST;dbname=$DB_NAME;charset=utf8mb4", $DB_USER, 
 $pdo->exec("CREATE TABLE IF NOT EXISTS participants (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
-  code_hash VARCHAR(255) NOT NULL,
+  code_hash VARCHAR(255) DEFAULT NULL,
   code_plain VARCHAR(20) DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
@@ -56,13 +56,10 @@ if ((int)$pdo->query("SELECT COUNT(*) FROM challenges")->fetchColumn() === 0) {
 $names = ['Alan','Sirlene','Azofe','Manua','Ronaldo','Monu','Marcos','Ammilee','Azonzinho','Tae Jeung','Mateus'];
 $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 $codes = [];
-$st = $pdo->prepare("INSERT INTO participants (name, code_hash, code_plain) VALUES (?,?,?)");
+$st = $pdo->prepare("INSERT INTO participants (name, code_hash, code_plain) VALUES (?,NULL,NULL)");
 foreach ($names as $n) {
-  $code = '';
-  for ($i = 0; $i < 8; $i++) $code .= $chars[random_int(0, strlen($chars)-1)];
-  $code = substr($code,0,4).'-'.substr($code,4);
-  $st->execute([$n, password_hash($code, PASSWORD_DEFAULT), $code]);
-  $codes[] = "$n — código: $code";
+  $st->execute([$n]);
+  $codes[] = $n;
 }
-file_put_contents(__DIR__.'/codigos-iniciais.txt', "CÓDIGOS INICIAIS — envie cada um PRIVADO e APAGUE este arquivo depois.\n\n".implode("\n",$codes)."\n");
-echo "<h1>✅ Instalação concluída!</h1><p>Códigos gerados em <b>codigos-iniciais.txt</b> (na mesma pasta) e também no banco de dados.</p><p><b>APAGUE o install.php e o codigos-iniciais.txt do servidor após anotar tudo!</b></p>";
+// Sem codigos aqui: cada participante gera o PROPRIO codigo no site.
+echo "<h1>Instalacao concluida!</h1><p>Participantes cadastrados SEM codigo. Cada um gera o proprio codigo no site.</p><p><b>APAGUE o install.php e o teste-conexao.php do servidor!</b></p>";
