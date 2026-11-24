@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS draws (
   giver_id INT UNSIGNED NOT NULL,
   receiver_id INT UNSIGNED NOT NULL,
   challenge_id INT UNSIGNED DEFAULT NULL,
+  revealed_at TIMESTAMP NULL DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY uq_giver (giver_id),
   CONSTRAINT fk_draw_giver FOREIGN KEY (giver_id) REFERENCES participants(id) ON DELETE CASCADE,
@@ -40,3 +41,6 @@ INSERT INTO challenges (label, emoji, description) VALUES
  ('História','📖','Conte uma história engraçada inventada sobre seu amigo secreto antes de revelar.'),
  ('Charada','🧩','Faça uma charada sobre seu amigo secreto. Quem acertar ganha o presente das suas mãos!'),
  ('Coroa','👑','Coroa seu amigo secreto como rei/rainha da festa e entregue o presente.');
+
+CREATE TABLE IF NOT EXISTS settings (id INT PRIMARY KEY, draw_enabled TINYINT(1) NOT NULL DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT IGNORE INTO settings (id,draw_enabled) VALUES (1,0);

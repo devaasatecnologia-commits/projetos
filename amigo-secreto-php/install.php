@@ -24,11 +24,14 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS challenges (
   emoji VARCHAR(10) DEFAULT '🎲',
   description TEXT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+$pdo->exec("CREATE TABLE IF NOT EXISTS settings (id INT PRIMARY KEY, draw_enabled TINYINT(1) NOT NULL DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+$pdo->exec("INSERT IGNORE INTO settings (id,draw_enabled) VALUES (1,0)");
 $pdo->exec("CREATE TABLE IF NOT EXISTS draws (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   giver_id INT UNSIGNED NOT NULL,
   receiver_id INT UNSIGNED NOT NULL,
   challenge_id INT UNSIGNED DEFAULT NULL,
+  revealed_at TIMESTAMP NULL DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY uq_giver (giver_id),
   CONSTRAINT fk_draw_giver FOREIGN KEY (giver_id) REFERENCES participants(id) ON DELETE CASCADE,
